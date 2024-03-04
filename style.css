@@ -1,0 +1,97 @@
+/* size of map */
+
+html, body {  
+    height: 100%;  
+    width: 100%; 
+    margin: 0;  
+    padding: 0;  
+    overflow: hidden;  
+  } 
+  
+  /* format header and footer container */
+  
+  .sample-head-foot {
+    box-sizing: border-box; 
+    background-color: #c3b2d9;
+    color: #eee;
+    left: 0;
+    right: 0;
+    font-size: 30px;
+    text-align: center;
+  }
+  
+  /* style header container */
+  
+  #header {
+    margin: 0;
+    height: 40px;
+    border: 2px solid #c3b2d9;
+    color: #ffffff
+  }
+  
+  /* style map border */
+  
+  #my-map {
+    box-sizing: border-box; 
+    border: 2px solid #c3b2d9;
+    position: absolute;
+    top: 40px;
+    right: 0;
+    left: 0;
+    bottom: 50px;
+  }
+  
+  /* style footer */
+  
+  #footer {
+      position: absolute;
+      bottom: 0;
+      border: 2px solid #c3b2d9;
+      color: #ffffff;
+      height: 50px;
+  }
+  
+  /* Add in layer toggle style */
+  
+  #menu {
+    background: #fff;
+    position: absolute;
+    z-index: 1;
+    bottom: 100px;
+    right: 30px;
+    border-radius: 3px;
+    width: 120px;
+    border: 1px solid rgba(0, 0, 0, 0.4);
+    font-family: 'Open Sans', sans-serif;
+    }
+     
+    #menu a {
+    font-size: 13px;
+    color: #404040;
+    display: block;
+    margin: 0;
+    padding: 0;
+    padding: 10px;
+    text-decoration: none;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
+    text-align: center;
+    }
+     
+    #menu a:last-child {
+    border: none;
+    }
+     
+    #menu a:hover {
+    background-color: #f8f8f8;
+    color: #404040;
+    }
+     
+    #menu a.active {
+    background-color: #54416e;
+    color: #ffffff;
+    }
+     
+    #menu a.active:hover {
+    background: #54416e;
+    }
+  
