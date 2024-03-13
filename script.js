@@ -1,4 +1,4 @@
-// Add basemap
+// Add basemap and initialize map
 mapboxgl.accessToken = 'pk.eyJ1Ijoic2FyYWh4eWNoZW4iLCJhIjoiY2xyZnB4c2h0MDhnMzJqcGpvZ2sxOHk4byJ9.yIz3cOJ6CJBeoUb3hvbBFA'; //Add default public map token from your Mapbox account
 
 const map = new mapboxgl.Map({
@@ -11,7 +11,7 @@ const map = new mapboxgl.Map({
 // add zoom control
 map.addControl(new mapboxgl.NavigationControl());
 
-// Add biking parking point GeoJSON
+// Add biking parking point GeoJSON (classified by interpolating zoom and bike point colour symbology by capacity of each parking station)
 
 map.on('load', () => {
     map.addSource('Bike-parking', {
@@ -19,16 +19,48 @@ map.on('load', () => {
         data: 'https://raw.githubusercontent.com/sarahxychen/GGR472_Lab2Git/main/bike_parking.geojson' 
         });
 
-    map.addLayer({ // Styling source data
+    map.addLayer({ 
         'id': 'parking-point', 
         'type': 'circle', 
         'source': 'Bike-parking', 
         'paint': {
-            'circle-radius': 5,
-            'circle-color': '#fb32b5' 
+            'circle-radius': [
+                     'interpolate', //INTERPOLATE expression produces continuous results by interpolating between value pairs
+                     ['linear'], //linear interpolation between stops but could be exponential ['exponential', base] where base controls rate at which output increases
+                     ['zoom'], //zoom expression changes appearance with zoom level
+                     10, 7, // when zoom is 10 (or less), radius will be 7px
+                     12, 5 // when zoom is 12 (or greater), radius will 5px
+                ],
+            'circle-color': [
+                'step', // STEP expression produces stepped results based on value pairs //Classify biking points based on type of bike parking capacity in column: Bicycle_capacity to display ramp colour on points
+                ['get', 'BICYCLE_CAPACITY'], // GET expression retrieves property value from 'capacity' data field
+                '#fad9ee', // Colour assigned to any values < first step (so 0-7)
+                8, '#fab1e0', // Colours assigned to values >= each step (8-9)
+                10, '#f587ce', // >=(10-13)
+                14, '#fb32b5', // >=(14)
+            ]
         }
     });
+
+// Add biking parking point by name property
+
+map.addLayer({
+    'id': 'parking-point',
+    'type': 'symbol',
+    'source': 'Bike-parking',
+    'layout': {
+        'text-field': ['get', 'name'],
+        'text-variable-anchor': ['bottom'],
+        'text-radial-offset': 0.5,
+        'text-justify': 'auto'
+    },
+    'paint': {
+        'text-color': 'pink'
+    }
 });
+
+});
+
 
 // Add cycling network GeoJSON
 
