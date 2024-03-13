@@ -8,6 +8,15 @@ const map = new mapboxgl.Map({
     zoom: 11.72 // starting zoom
 });
 
+//Add search control to map overlay //restricted to Canada only search
+map.addControl(
+    new MapboxGeocoder({
+        accessToken: mapboxgl.accessToken,
+        mapboxgl: mapboxgl,
+        countries: "ca"
+    })
+);
+
 // add zoom control
 map.addControl(new mapboxgl.NavigationControl());
 
@@ -44,25 +53,51 @@ map.on('load', () => {
 
 });
 
-// Add neighbourhood GeoJSON
+// Add neighbourhood GeoJSON (includes change of visualization based on mouse event)
 
 map.on('load', () => {
     map.addSource('neighbourhoods', {
         type: 'geojson',
-        data: 'https://raw.githubusercontent.com/sarahxychen/GGR472_Lab3/main/neighbourhoods.geojson'
+        data: 'https://raw.githubusercontent.com/sarahxychen/GGR472_Lab3/main/neighbourhoods.geojson' 
         });
 
-    map.addLayer({ // Styling source data
-        'id': 'cycle-path', 
-        'type': 'line', 
-        'source': 'Cycle-network', 
+    // Styling initial visualization
+    map.addLayer({ 
+        'id': 'neighbourhood', 
+        'type': 'fill', 
+        'source': 'neighbourhoods', 
         'paint': {
-            'line-width': 2,
-            'line-color': '#9404fb' 
-        }
+            'fill-color': '#d3cadb',
+            'fill-opacity': 0.5,
+            'fill-outline-color': 'black'
+        },
     });
+
+     //Styling second visualization of the neighbourhood polygon
+     map.addLayer({
+        'id': 'neighbourhood-hl', //Highlighted neighbourhood id 
+        'type': 'fill',
+        'source': 'neighbourhoods',
+        'paint': {
+            'fill-color': '#9580a8',
+            'fill-opacity': 1, //Opacity set to 1
+            'fill-outline-color': 'black'
+        },
+        'filter': ['==', ['get', '_id'], ''] //Set an initial filter to return nothing
+    });
+
 });
 
+//Add mouse click event for neighbourhood name label
+map.on('click', 'neighbourhood', (e) => {
+
+    //console.log(e);   //e is the event info triggered and is passed to the function as a parameter (e)
+                        //Explore console output using Google DevTools
+
+    let neighbour_name = e.features[0].properties.AREA_NAME;
+    console.log(neighbour_name);
+
+});
 
 // Add cycling network GeoJSON
 
