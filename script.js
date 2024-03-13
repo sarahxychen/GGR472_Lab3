@@ -42,23 +42,25 @@ map.on('load', () => {
         }
     });
 
-// Add biking parking point by name property
-
-map.addLayer({
-    'id': 'parking-point',
-    'type': 'symbol',
-    'source': 'Bike-parking',
-    'layout': {
-        'text-field': ['get', 'name'],
-        'text-variable-anchor': ['bottom'],
-        'text-radial-offset': 0.5,
-        'text-justify': 'auto'
-    },
-    'paint': {
-        'text-color': 'pink'
-    }
 });
 
+// Add neighbourhood GeoJSON
+
+map.on('load', () => {
+    map.addSource('neighbourhoods', {
+        type: 'geojson',
+        data: 'https://raw.githubusercontent.com/sarahxychen/GGR472_Lab3/main/neighbourhoods.geojson'
+        });
+
+    map.addLayer({ // Styling source data
+        'id': 'cycle-path', 
+        'type': 'line', 
+        'source': 'Cycle-network', 
+        'paint': {
+            'line-width': 2,
+            'line-color': '#9404fb' 
+        }
+    });
 });
 
 
