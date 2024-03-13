@@ -43,14 +43,27 @@ map.on('load', () => {
             'circle-color': [
                 'step', // STEP expression produces stepped results based on value pairs //Classify biking points based on type of bike parking capacity in column: Bicycle_capacity to display ramp colour on points
                 ['get', 'BICYCLE_CAPACITY'], // GET expression retrieves property value from 'capacity' data field
-                '#fad9ee', // Colour assigned to any values < first step (so 0-7)
-                8, '#fab1e0', // Colours assigned to values >= each step (8-9)
-                10, '#f587ce', // >=(10-13)
-                14, '#fb32b5', // >=(14)
+                '#f07dcf', // Colour assigned to any values < first step (so 0-9)
+                10, '#d10496', // Colours assigned to values >= each step (10-19)
+                20, '#d9027c', // >=(20-29)
+                30, '#9c0259', // >=(30-119)
+                120, '#52022f', // >=(120)
             ]
         }
     });
 
+});
+
+//Add pop up for mouse click event to show bike parking information
+map.on('click', 'parking-point', (e) => {
+    new mapboxgl.Popup() //Declare new popup object on each click
+        .setLngLat(e.lngLat) //Use method to set coordinates of popup based on mouse click location
+        .setHTML( //Use click event properties to write text for popup
+            "<b>Bike Parking Capacity:</b> " + "<br>" + e.features[0].properties.BICYCLE_CAPACITY + "<br>" + 
+            "<b>Parking Type:</b> " + "<br>" + e.features[0].properties.PARKING_TYPE + "<br>" + 
+            "<b>Address:</b> " + "<br>" + e.features[0].properties.LINEAR_NAME_FULL + "<br>" + 
+            "<b>Neighbourhood</b> " + "<br>" + e.features[0].properties.WARD) 
+        .addTo(map); //Show popup on map
 });
 
 // Add neighbourhood GeoJSON (includes change of visualization based on mouse event)
@@ -68,7 +81,7 @@ map.on('load', () => {
         'source': 'neighbourhoods', 
         'paint': {
             'fill-color': '#d3cadb',
-            'fill-opacity': 0.5,
+            'fill-opacity': 0.4,
             'fill-outline-color': 'black'
         },
     });
@@ -88,16 +101,13 @@ map.on('load', () => {
 
 });
 
-//Add mouse click event for neighbourhood name label
-map.on('click', 'neighbourhood', (e) => {
-
-    //console.log(e);   //e is the event info triggered and is passed to the function as a parameter (e)
-                        //Explore console output using Google DevTools
-
-    let neighbour_name = e.features[0].properties.AREA_NAME;
-    console.log(neighbour_name);
-
-});
+//Add pop up for mouse click event to show neighbourhood name label
+//map.on('click', 'neighbourhood', (e) => {
+//    new mapboxgl.Popup() //Declare new popup object on each click
+//       .setLngLat(e.lngLat) //Use method to set coordinates of popup based on mouse click location
+//        .setHTML("<b>Neighbourhood:</b> " + "<br>" + e.features[0].properties.AREA_NAME) //Use click event properties to write text for popup
+//        .addTo(map); //Show popup on map
+//});
 
 // Add cycling network GeoJSON
 
@@ -116,6 +126,15 @@ map.on('load', () => {
             'line-color': '#9404fb' 
         }
     });
+});
+
+//Add pop up for mouse click event to show street name label
+map.on('click', 'cycle-path', (e) => {
+    new mapboxgl.Popup() //Declare new popup object on each click
+        .setLngLat(e.lngLat) //Use method to set coordinates of popup based on mouse click location
+        .setHTML("<b>Cyle Path:</b> " + "<br>" + e.features[0].properties.STREET_NAME + "<br>" + 
+        "<b>Last Upgraded:</b> " + "<br>" + e.features[0].properties.UPGRADED) //Use click event properties to write text for popup
+        .addTo(map); //Show popup on map
 });
 
 // Add toggle feature
