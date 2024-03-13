@@ -55,6 +55,14 @@ map.on('load', () => {
 });
 
 //Add pop up for mouse click event to show bike parking information
+map.on('mouseenter', 'parking-point', () => {
+    map.getCanvas().style.cursor = 'pointer'; //Switch cursor to pointer when mouse is over parking points
+});
+
+map.on('mouseleave', 'parking-point', () => {
+    map.getCanvas().style.cursor = ''; //Switch cursor back when mouse leaves parking points
+});
+
 map.on('click', 'parking-point', (e) => {
     new mapboxgl.Popup() //Declare new popup object on each click
         .setLngLat(e.lngLat) //Use method to set coordinates of popup based on mouse click location
@@ -93,7 +101,7 @@ map.on('load', () => {
         'source': 'neighbourhoods',
         'paint': {
             'fill-color': '#9580a8',
-            'fill-opacity': 1, //Opacity set to 1
+            'fill-opacity': 0.8, //Opacity set to 0.8 to see and interact with layers underneath still
             'fill-outline-color': 'black'
         },
         'filter': ['==', ['get', '_id'], ''] //Set an initial filter to return nothing
@@ -101,13 +109,16 @@ map.on('load', () => {
 
 });
 
-//Add pop up for mouse click event to show neighbourhood name label
-//map.on('click', 'neighbourhood', (e) => {
-//    new mapboxgl.Popup() //Declare new popup object on each click
-//       .setLngLat(e.lngLat) //Use method to set coordinates of popup based on mouse click location
-//        .setHTML("<b>Neighbourhood:</b> " + "<br>" + e.features[0].properties.AREA_NAME) //Use click event properties to write text for popup
-//        .addTo(map); //Show popup on map
-//});
+//Add hover event to switch between visual 1 and 2 of neighbourhoods to highlight the neighbourhood polygon
+map.on('mousemove', 'neighbourhood', (e) => {
+    if (e.features.length > 0) { //if there are features in the event features array (i.e features under the mouse hover) then go into the conditional
+
+        //set the filter of the provinces-hl to display the feature you're hovering over
+        //e.features[0] is the first feature in the array and properties.PRUID is the Province ID for that feature
+        map.setFilter('neighbourhood-hl', ['==', ['get', '_id'], e.features[0].properties._id]);
+
+    }
+ });
 
 // Add cycling network GeoJSON
 
@@ -129,6 +140,14 @@ map.on('load', () => {
 });
 
 //Add pop up for mouse click event to show street name label
+map.on('mouseenter', 'cycle-path', () => {
+    map.getCanvas().style.cursor = 'pointer'; //Switch cursor to pointer when mouse is over cyling lanes
+});
+
+map.on('mouseleave', 'cycle-path', () => {
+    map.getCanvas().style.cursor = ''; //Switch cursor back when mouse leaves cycling lanes
+});
+
 map.on('click', 'cycle-path', (e) => {
     new mapboxgl.Popup() //Declare new popup object on each click
         .setLngLat(e.lngLat) //Use method to set coordinates of popup based on mouse click location
