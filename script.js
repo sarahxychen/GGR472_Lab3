@@ -8,7 +8,7 @@ const map = new mapboxgl.Map({
     zoom: 11.72 // starting zoom
 });
 
-//Add search control to map overlay //restricted to Canada only search
+//Add search control to map overlay //restricted to Canada only search 
 map.addControl(
     new MapboxGeocoder({
         accessToken: mapboxgl.accessToken,
@@ -19,6 +19,9 @@ map.addControl(
 
 // add zoom control
 map.addControl(new mapboxgl.NavigationControl());
+
+// Add fullscreen option to the map
+map.addControl(new mapboxgl.FullscreenControl());
 
 // Add biking parking point GeoJSON (classified by interpolating zoom and bike point colour symbology by capacity of each parking station)
 
@@ -156,58 +159,32 @@ map.on('click', 'cycle-path', (e) => {
         .addTo(map); //Show popup on map
 });
 
-// Add toggle feature
 
-// After the last frame rendered before the map enters an "idle" state.
-map.on('idle', () => {
-    // If these two layers were not added to the map, abort
-    if (!map.getLayer('cycle-path') || !map.getLayer('parking-point')) {
-    return;
-    }
-     
-    // Enumerate ids of the layers.
-    const toggleableLayerIds = ['cycle-path', 'parking-point'];
-     
-    // Set up the corresponding toggle button for each layer.
-    for (const id of toggleableLayerIds) {
-    // Skip layers that already have a button set up.
-        if (document.getElementById(id)) {
-        continue;
-        }
-     
-    // Create a link.
-    const link = document.createElement('a');
-    link.id = id;
-    link.href = '#';
-    link.textContent = id;
-    link.className = 'active';
-     
-    // Show or hide layer when the toggle is clicked.
-    link.onclick = function (e) {
-        const clickedLayer = this.textContent;
-        e.preventDefault();
-        e.stopPropagation();
-     
-        const visibility = map.getLayoutProperty(
-         clickedLayer,
-        'visibility'
+//Add toggle feature for 3 layers
+
+//Change biking point layer display based on check box using setLayoutProperty method
+document.getElementById('bikecheck').addEventListener('change', (e) => {
+    map.setLayoutProperty(
+        'parking-point',
+        'visibility',
+        e.target.checked ? 'visible' : 'none'
     );
-     
-    // Toggle layer visibility by changing the layout object's visibility property.
-    if (visibility === 'visible') {
-        map.setLayoutProperty(clickedLayer, 'visibility', 'none');
-        this.className = '';
-        } else {
-            this.className = 'active';
-            map.setLayoutProperty(
-            clickedLayer,
-                'visibility',
-                'visible'
-            );
-         }
-    };
-     
-        const layers = document.getElementById('menu');
-        layers.appendChild(link);
-    }
+});
+
+//Change cycling lane layer display based on check box using setLayoutProperty method
+document.getElementById('cyclecheck').addEventListener('change', (e) => {
+    map.setLayoutProperty(
+        'cycle-path',
+        'visibility',
+        e.target.checked ? 'visible' : 'none'
+    );
+});
+
+//Change neighbourhood layer display based on check box using setLayoutProperty method
+document.getElementById('neighbourcheck').addEventListener('change', (e) => {
+    map.setLayoutProperty(
+        'neighbourhood',
+        'visibility',
+        e.target.checked ? 'visible' : 'none'
+    );
 });

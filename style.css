@@ -7,7 +7,48 @@ html, body {
     padding: 0;  
     overflow: hidden;  
   } 
-  
+
+  /* style and position layer toggle container */
+  .map-data-container {
+    position: absolute;
+    font: 14px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    color: #54416e; /*font colour*/
+    background: rgba(255, 255, 255, 0.8);
+    width: 260px;
+    bottom: 0;
+    left: 10px;
+    margin-bottom: 70px;
+    padding: 10px;
+    right: 10px;
+    overflow: visible;
+}
+
+  /*style and position legend container */
+  .legend {
+    position: absolute;
+    background-color: #fff;
+    border-radius: 3px;
+    bottom: 0;
+    margin-bottom: 70px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1); /*horizontal shadow, vertical shadow, size of shadow, color*/
+    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    padding: 10px;
+    right: 10px;
+    z-index: 1;
+}
+
+.legend h4 {
+    margin: 0 0 10px;
+}
+
+.legend div span {
+    display: inline-block;
+    border-radius: 50%; /*curve border to make a circle*/
+    height: 10px; /*size of circle*/
+    width: 10px;
+    margin-right: 5px; /*position of circle*/
+}
+
   /* format header and footer container */
   
   .sample-head-foot {
@@ -24,7 +65,7 @@ html, body {
   
   #header {
     margin: 0;
-    height: 40px;
+    height: 50px;
     border: 2px solid #c3b2d9;
     color: #ffffff
   }
@@ -35,7 +76,7 @@ html, body {
     box-sizing: border-box; 
     border: 2px solid #c3b2d9;
     position: absolute;
-    top: 40px;
+    top: 50px;
     right: 0;
     left: 0;
     bottom: 50px;
@@ -50,48 +91,3 @@ html, body {
       color: #ffffff;
       height: 50px;
   }
-  
-  /* Add in layer toggle style */
-  
-  #menu {
-    background: #fff;
-    position: absolute;
-    z-index: 1;
-    bottom: 100px;
-    right: 30px;
-    border-radius: 3px;
-    width: 120px;
-    border: 1px solid rgba(0, 0, 0, 0.4);
-    font-family: 'Open Sans', sans-serif;
-    }
-     
-    #menu a {
-    font-size: 13px;
-    color: #404040;
-    display: block;
-    margin: 0;
-    padding: 0;
-    padding: 10px;
-    text-decoration: none;
-    border-bottom: 1px solid rgba(0, 0, 0, 0.25);
-    text-align: center;
-    }
-     
-    #menu a:last-child {
-    border: none;
-    }
-     
-    #menu a:hover {
-    background-color: #f8f8f8;
-    color: #404040;
-    }
-     
-    #menu a.active {
-    background-color: #54416e;
-    color: #ffffff;
-    }
-     
-    #menu a.active:hover {
-    background: #54416e;
-    }
-  
